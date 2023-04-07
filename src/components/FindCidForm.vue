@@ -25,6 +25,17 @@ export default {
       load: false
     };
   },
+  watch: {
+    twins: {
+      handler() {
+        if (this.twins.length) {
+          this.id = this.twins[this.twins.length - 1];
+        } else {
+          this.id = "";
+        }
+      }
+    }
+  },
   methods: {
     async find() {
       this.load = true;
