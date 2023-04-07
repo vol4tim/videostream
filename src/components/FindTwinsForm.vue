@@ -27,7 +27,7 @@ export default {
   emits: ["twins"],
   data() {
     return {
-      controller: "4CesqpF19xsn8hskhA1GHJUYwJmPmgg1bWnQfiJJTpLhH4eP",
+      controller: "",
       load: false
     };
   },

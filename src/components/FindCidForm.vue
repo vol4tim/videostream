@@ -21,7 +21,7 @@ export default {
   props: { twins: { type: Array } },
   data() {
     return {
-      id: "188",
+      id: "",
       load: false
     };
   },
