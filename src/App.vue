@@ -6,9 +6,7 @@
   </div>
   <div class="block">
     <template v-if="isReady">
-      <find-twins-form @twins="handlerTwins" />
-      <br />
-      <find-cid-form :twins="twins" @cid="handlerCid" />
+      <find-video-form @video="handlerFindVideo" />
       <br />
       <br />
       <a v-if="video" :href="`https://ipfs.io/ipfs/${video}`" target="_blank">
@@ -20,16 +18,14 @@
 </template>
 
 <script>
-import FindCidForm from "./components/FindCidForm.vue";
-import FindTwinsForm from "./components/FindTwinsForm.vue";
+import FindVideoForm from "./components/FindVideoForm.vue";
 
 export default {
   name: "App",
-  components: { FindTwinsForm, FindCidForm },
+  components: { FindVideoForm },
   data() {
     return {
       isReady: false,
-      twins: [],
       video: ""
     };
   },
@@ -39,10 +35,7 @@ export default {
     });
   },
   methods: {
-    handlerTwins(twins) {
-      this.twins = twins;
-    },
-    handlerCid(cid) {
+    handlerFindVideo(cid) {
       this.video = cid;
     }
   }

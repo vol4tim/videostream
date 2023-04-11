@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { utils } from "robonomics-interface";
+
 const findIdTwins = async (robonomics, address) => {
   const ids = [];
   const total = await robonomics.twin.getTotal();
@@ -22,9 +24,26 @@ const findIdTwins = async (robonomics, address) => {
   }
   return ids;
 };
+const findVideoCid = async (robonomics, id) => {
+  try {
+    const twin = await robonomics.twin.getTwin(id);
+    if (twin) {
+      const hexVideo = Object.keys(twin).find(
+        (key) =>
+          twin[key] === "4CC7GkKuJJzFzswqz39m5qWbgXaQks9f36jCgsadpN2c1hnh"
+      );
+      if (hexVideo) {
+        return utils.hexToCid(hexVideo);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return;
+};
 
 export default {
-  emits: ["twins"],
+  emits: ["video"],
   data() {
     return {
       controller: "",
@@ -34,14 +53,19 @@ export default {
   methods: {
     async find() {
       this.load = true;
-      this.$emit("twins", []);
+      this.$emit("video");
       try {
         const twins = await findIdTwins(this.$robonomics, this.controller);
-        this.$emit("twins", twins);
+        if (twins.length > 0) {
+          const cid = await findVideoCid(
+            this.$robonomics,
+            twins[twins.length - 1]
+          );
+          this.$emit("video", cid);
+        }
       } catch (error) {
         console.log(error);
       }
-
       this.load = false;
     }
   }
