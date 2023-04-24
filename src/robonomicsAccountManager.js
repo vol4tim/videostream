@@ -49,7 +49,7 @@ export default class AccountManagerUi extends AccountManager {
         this.api.setSigner(injected.signer);
         this.account.signMsg = async (data) => {
           return (
-            await this.extension.signer.signRaw({
+            await injected.signer.signRaw({
               address: this.account.address,
               data: u8aToHex(u8aWrapBytes(data)),
               type: "bytes"
