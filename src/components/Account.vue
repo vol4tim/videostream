@@ -46,7 +46,7 @@ export default {
       this.error = "";
       try {
         await this.$robonomics.accountManager.initPlugin({
-          isDevelopment: true
+          isDevelopment: false
         });
         this.accounts = this.$robonomics.accountManager.getAccounts();
         if (this.accounts.length) {
