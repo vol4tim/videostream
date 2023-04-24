@@ -4,14 +4,31 @@
       <h1>Video stream</h1>
     </div>
   </div>
-  <div class="block">
+  <div>
     <template v-if="isReady">
-      <find-video-form @video="handlerFindVideo" />
-      <br />
-      <br />
-      <a v-if="video" :href="`https://ipfs.io/ipfs/${video}`" target="_blank">
-        {{ video }}
-      </a>
+      <div class="block">
+        <find-video-form @video="handlerFindVideo" />
+      </div>
+      <template v-if="videoCid">
+        <div class="block">
+          Result:
+          <a :href="`https://ipfs.io/ipfs/${videoCid}`" target="_blank">
+            {{ videoCid }}
+          </a>
+        </div>
+        <div class="block" v-if="videoCid">
+          <ipfs-auth @auth="handlerAuth" />
+          <ipfs-files
+            v-if="ipfsAuth"
+            :controller="videoController"
+            :cid="videoCid"
+            @play="handlerPlay"
+          />
+        </div>
+        <div class="block" v-if="videoContent || videoIsLoad">
+          <video-content :isLoad="videoIsLoad" :content="videoContent" />
+        </div>
+      </template>
     </template>
     <template v-else>...</template>
   </div>
@@ -19,14 +36,21 @@
 
 <script>
 import FindVideoForm from "./components/FindVideoForm.vue";
+import IpfsAuth from "./components/IpfsAuth.vue";
+import IpfsFiles from "./components/IpfsFiles.vue";
+import VideoContent from "./components/Video.vue";
 
 export default {
   name: "App",
-  components: { FindVideoForm },
+  components: { IpfsAuth, IpfsFiles, FindVideoForm, VideoContent },
   data() {
     return {
       isReady: false,
-      video: ""
+      videoCid: null,
+      videoController: null,
+      videoIsLoad: false,
+      videoContent: null,
+      ipfsAuth: false
     };
   },
   async created() {
@@ -35,8 +59,16 @@ export default {
     });
   },
   methods: {
-    handlerFindVideo(cid) {
-      this.video = cid;
+    handlerFindVideo({ controller = null, cid = null } = {}) {
+      this.videoController = controller;
+      this.videoCid = cid;
+    },
+    handlerAuth(result) {
+      this.ipfsAuth = result;
+    },
+    handlerPlay({ isLoad, content }) {
+      this.videoIsLoad = isLoad;
+      this.videoContent = content;
     }
   }
 };

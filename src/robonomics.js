@@ -1,4 +1,6 @@
+import keyring from "@polkadot/ui-keyring";
 import { Robonomics } from "robonomics-interface";
+import AccountManager from "./robonomicsAccountManager";
 
 export async function instance() {
   try {
@@ -24,6 +26,9 @@ export default {
       cbReady = cb;
     };
     app.config.globalProperties.$robonomics = await instance();
+    app.config.globalProperties.$robonomics.setAccountManager(
+      new AccountManager(keyring)
+    );
 
     isReady = true;
     if (cbReady) {

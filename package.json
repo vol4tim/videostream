@@ -10,9 +10,11 @@
   "dependencies": {
     "@polkadot/api": "^10.2.2",
     "@polkadot/extension-dapp": "^0.45.5",
+    "@polkadot/keyring": "11.0.2",
     "@polkadot/ui-keyring": "^3.1.4",
     "buffer": "^6.0.3",
     "core-js": "^3.8.3",
+    "ipfs-http-client": "^60.0.0",
     "robonomics-interface": "^0.3.0",
     "vue": "^3.2.13"
   },
@@ -37,7 +39,9 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {
+      "vue/multi-word-component-names": 0
+    }
   },
   "browserslist": [
     "> 1%",
