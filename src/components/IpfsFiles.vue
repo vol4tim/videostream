@@ -5,7 +5,12 @@
   <template v-else-if="files.length > 0">
     <div style="margin: 20px 0">
       Controller seed for decrypt video:
-      <input v-model="seed" />
+      <div class="input-container">
+        <input :type="typeInput" v-model="seed" class="input-box" />
+        <button class="input-box" @click="togglePassword">
+          {{ typeInput === "password" ? "show" : "hide" }}
+        </button>
+      </div>
     </div>
     <div v-for="(file, k) in files" :key="k">
       <a :href="`https://ipfs.io/ipfs/${file.path}`" target="_blank">
@@ -32,7 +37,8 @@ export default {
       seed: "",
       files: [],
       isLoadFiles: false,
-      isLoadVideo: false
+      isLoadVideo: false,
+      typeInput: "password"
     };
   },
   async created() {
@@ -87,7 +93,22 @@ export default {
         controller.publicKey
       );
       return decryptMessage;
+    },
+    togglePassword() {
+      this.typeInput = this.typeInput === "password" ? "text" : "password";
     }
   }
 };
 </script>
+
+<style scoped>
+.input-container {
+  display: flex;
+}
+.input-box {
+  flex: 0 1 auto;
+}
+.input-box:nth-child(1) {
+  flex: 1 1 auto;
+}
+</style>
