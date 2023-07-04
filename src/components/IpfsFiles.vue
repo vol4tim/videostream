@@ -13,7 +13,7 @@
       </div>
     </div>
     <div v-for="(file, k) in files" :key="k">
-      <a :href="`https://ipfs.io/ipfs/${file.path}`" target="_blank">
+      <a :href="`https://${$ipfs_gateway}/ipfs/${file.path}`" target="_blank">
         {{ file.name }}
       </a>
       <button :disabled="!isValidASeed || isLoadVideo" @click="play(file.cid)">

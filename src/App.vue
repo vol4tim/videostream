@@ -12,7 +12,10 @@
       <template v-if="videoCid">
         <div class="block">
           Result:
-          <a :href="`https://ipfs.io/ipfs/${videoCid}`" target="_blank">
+          <a
+            :href="`https://${$ipfs_gateway}/ipfs/${videoCid}`"
+            target="_blank"
+          >
             {{ videoCid }}
           </a>
         </div>
