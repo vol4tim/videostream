@@ -58,7 +58,7 @@ export default {
         this.files = (await this.$ipfs.ls(cid)).map((file) => {
           const ext = file.name.split(".").pop();
           let type = "none";
-          if (ext === "png") {
+          if (ext === "png" || ext === "jpg") {
             type = "image";
           } else if (ext === "mp4") {
             type = "video";
