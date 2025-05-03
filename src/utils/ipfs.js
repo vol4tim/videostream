@@ -36,14 +36,19 @@ export default class Ipfs {
       }
     });
     const cat = async (cid) => {
-      const decoder = new TextDecoder();
-      let content = "";
-      for await (const chunk of client.cat(cid)) {
-        content += decoder.decode(chunk, {
-          stream: true
-        });
+      const contents = [];
+      for await (const buf of client.cat(cid)) {
+        contents.push(buf);
       }
-      return content;
+      return contents;
+      // const decoder = new TextDecoder();
+      // let content = "";
+      // for await (const chunk of client.cat(cid)) {
+      //   content += decoder.decode(chunk, {
+      //     stream: true
+      //   });
+      // }
+      // return content;
     };
     return await cat(cid);
   }

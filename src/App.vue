@@ -29,7 +29,12 @@
           />
         </div>
         <div class="block" v-if="videoContent || videoIsLoad">
-          <video-content :isLoad="videoIsLoad" :content="videoContent" />
+          <image-content
+            v-if="typeContent === 'image'"
+            :isLoad="videoIsLoad"
+            :content="videoContent"
+          />
+          <video-content v-else :isLoad="videoIsLoad" :content="videoContent" />
         </div>
       </template>
     </template>
@@ -39,17 +44,25 @@
 
 <script>
 import FindVideoForm from "./components/FindVideoForm.vue";
+import ImageContent from "./components/Image.vue";
 import IpfsAuth from "./components/IpfsAuth.vue";
 import IpfsFiles from "./components/IpfsFiles.vue";
 import VideoContent from "./components/Video.vue";
 
 export default {
   name: "App",
-  components: { IpfsAuth, IpfsFiles, FindVideoForm, VideoContent },
+  components: {
+    IpfsAuth,
+    IpfsFiles,
+    FindVideoForm,
+    VideoContent,
+    ImageContent
+  },
   data() {
     return {
       isReady: false,
       videoCid: null,
+      typeContent: null,
       videoController: null,
       videoIsLoad: false,
       videoContent: null,
@@ -69,8 +82,9 @@ export default {
     handlerAuth(result) {
       this.ipfsAuth = result;
     },
-    handlerPlay({ isLoad, content }) {
+    handlerPlay({ isLoad, type, content }) {
       this.videoIsLoad = isLoad;
+      this.typeContent = type;
       this.videoContent = content;
     }
   }

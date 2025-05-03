@@ -27,7 +27,7 @@ export default {
         return;
       }
       const video = document.getElementById("video");
-      const blob = new Blob([videoData], {
+      const blob = new Blob(videoData, {
         type: "video/mp4"
       });
       video.src = URL.createObjectURL(blob);

@@ -3,7 +3,7 @@
     <div>...</div>
   </template>
   <template v-else-if="files.length > 0">
-    <div style="margin: 20px 0">
+    <!-- <div style="margin: 20px 0">
       Controller seed for decrypt video:
       <div class="input-container">
         <input :type="typeInput" v-model="seed" class="input-box" />
@@ -11,14 +11,16 @@
           {{ typeInput === "password" ? "show" : "hide" }}
         </button>
       </div>
-    </div>
+    </div> -->
     <div v-for="(file, k) in files" :key="k">
       <a :href="`${$ipfs_gateway}/ipfs/${file.path}`" target="_blank">
-        {{ file.name }}
-      </a>
-      <button :disabled="!isValidASeed || isLoadVideo" @click="play(file.cid)">
-        play
-      </button>
+        {{ file.name }} </a
+      >&nbsp;
+      <template v-if="file.type === 'video' || file.type === 'image'">
+        <button :disabled="isLoadVideo" @click="play(file.cid, file.type)">
+          show
+        </button>
+      </template>
     </div>
   </template>
   <template v-else>
@@ -53,19 +55,35 @@ export default {
     async ls(cid) {
       this.isLoadFiles = true;
       try {
-        this.files = await this.$ipfs.ls(cid);
+        this.files = (await this.$ipfs.ls(cid)).map((file) => {
+          const ext = file.name.split(".").pop();
+          let type = "none";
+          if (ext === "png") {
+            type = "image";
+          } else if (ext === "mp4") {
+            type = "video";
+          }
+          return {
+            ...file,
+            type
+          };
+        });
       } catch (error) {
         console.log(error);
       }
       this.isLoadFiles = false;
     },
-    async play(cid) {
+    async play(cid, type) {
       this.isLoadVideo = true;
       this.$emit("play", { isLoad: true, content: null });
       try {
         const content = await this.$ipfs.cat(cid);
-        const videoContent = this.decrypt(content);
-        this.$emit("play", { isLoad: false, content: videoContent });
+        // const videoContent = this.decrypt(content);
+        this.$emit("play", {
+          isLoad: false,
+          type,
+          content: content
+        });
       } catch (error) {
         console.log(error);
         this.$emit("play", { isLoad: false, content: null });
